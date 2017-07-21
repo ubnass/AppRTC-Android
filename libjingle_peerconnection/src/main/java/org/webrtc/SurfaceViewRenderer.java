@@ -92,6 +92,7 @@ public class SurfaceViewRenderer
     ThreadUtils.checkIsOnMainThread();
     this.rendererEvents = rendererEvents;
     synchronized (layoutLock) {
+      isFirstFrameRendered = false;
       rotatedFrameWidth = 0;
       rotatedFrameHeight = 0;
       frameRotation = 0;
@@ -163,12 +164,14 @@ public class SurfaceViewRenderer
   public void setScalingType(RendererCommon.ScalingType scalingType) {
     ThreadUtils.checkIsOnMainThread();
     videoLayoutMeasure.setScalingType(scalingType);
+    requestLayout();
   }
 
   public void setScalingType(RendererCommon.ScalingType scalingTypeMatchOrientation,
       RendererCommon.ScalingType scalingTypeMismatchOrientation) {
     ThreadUtils.checkIsOnMainThread();
     videoLayoutMeasure.setScalingType(scalingTypeMatchOrientation, scalingTypeMismatchOrientation);
+    requestLayout();
   }
 
   /**
