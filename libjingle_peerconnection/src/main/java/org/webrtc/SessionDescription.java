@@ -40,4 +40,12 @@ public class SessionDescription {
     this.type = type;
     this.description = description;
   }
+
+  @Override
+  public String toString() {
+    return "SessionDescription{" +
+        "type=" + type +
+        ", description='" + description + '\'' +
+        '}';
+  }
 }

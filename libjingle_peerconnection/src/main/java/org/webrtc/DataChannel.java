@@ -124,4 +124,13 @@ public class DataChannel {
 
   /** Dispose of native resources attached to this channel. */
   public native void dispose();
+
+  @Override
+  public String toString() {
+    return "DataChannel{" +
+        "id=" + id() +
+        ", label=" + label() +
+        ", state=" + state() +
+        '}';
+  }
 };

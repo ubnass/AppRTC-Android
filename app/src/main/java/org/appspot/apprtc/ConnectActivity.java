@@ -47,7 +47,8 @@ public class ConnectActivity extends Activity {
   private static final int REMOVE_FAVORITE_INDEX = 0;
   private static boolean commandLineRun = false;
 
-  private ImageButton connectButton;
+  private ImageButton videoChatButton;
+  private ImageButton textChatButton;
   private ImageButton addFavoriteButton;
   private EditText roomEditText;
   private ListView roomListView;
@@ -152,8 +153,10 @@ public class ConnectActivity extends Activity {
     roomListView.setEmptyView(findViewById(android.R.id.empty));
     roomListView.setOnItemClickListener(roomListClickListener);
     registerForContextMenu(roomListView);
-    connectButton = (ImageButton) findViewById(R.id.connect_button);
-    connectButton.setOnClickListener(connectListener);
+    videoChatButton = (ImageButton) findViewById(R.id.video_chat_button);
+    videoChatButton.setOnClickListener(videoChatListener);
+    textChatButton = (ImageButton) findViewById(R.id.text_chat_button);
+    textChatButton.setOnClickListener(textChatListener);
     addFavoriteButton = (ImageButton) findViewById(R.id.add_favorite_button);
     addFavoriteButton.setOnClickListener(addFavoriteListener);
 
@@ -165,7 +168,7 @@ public class ConnectActivity extends Activity {
       boolean useValuesFromIntent =
           intent.getBooleanExtra(CallActivity.EXTRA_USE_VALUES_FROM_INTENT, false);
       String room = sharedPref.getString(keyprefRoom, "");
-      connectToRoom(room, true, loopback, useValuesFromIntent, runTimeMs);
+      connectToRoom(room, true, loopback, useValuesFromIntent, runTimeMs, true);
     }
   }
 
@@ -210,7 +213,7 @@ public class ConnectActivity extends Activity {
       startActivity(intent);
       return true;
     } else if (item.getItemId() == R.id.action_loopback) {
-      connectToRoom(null, false, true, false, 0);
+      connectToRoom(null, false, true, false, 0, true);
       return true;
     } else {
       return super.onOptionsItemSelected(item);
@@ -320,7 +323,7 @@ public class ConnectActivity extends Activity {
   }
 
   private void connectToRoom(String roomId, boolean commandLineRun, boolean loopback,
-      boolean useValuesFromIntent, int runTimeMs) {
+      boolean useValuesFromIntent, int runTimeMs, boolean videoChat) {
     this.commandLineRun = commandLineRun;
 
     // roomId is random for loopback.
@@ -505,7 +508,12 @@ public class ConnectActivity extends Activity {
     Log.d(TAG, "Connecting to room " + roomId + " at URL " + roomUrl);
     if (validateUrl(roomUrl)) {
       Uri uri = Uri.parse(roomUrl);
-      Intent intent = new Intent(this, CallActivity.class);
+      Intent intent;
+      if (videoChat) {
+        intent = new Intent(this, CallActivity.class);
+      } else {
+        intent = new Intent(this, MsgActivity.class);
+      }
       intent.setData(uri);
       intent.putExtra(CallActivity.EXTRA_ROOMID, roomId);
       intent.putExtra(CallActivity.EXTRA_LOOPBACK, loopback);
@@ -602,7 +610,7 @@ public class ConnectActivity extends Activity {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
           String roomId = ((TextView) view).getText().toString();
-          connectToRoom(roomId, false, false, false, 0);
+          connectToRoom(roomId, false, false, false, 0, true);
         }
       };
 
@@ -617,10 +625,17 @@ public class ConnectActivity extends Activity {
     }
   };
 
-  private final OnClickListener connectListener = new OnClickListener() {
+  private final OnClickListener videoChatListener = new OnClickListener() {
     @Override
     public void onClick(View view) {
-      connectToRoom(roomEditText.getText().toString(), false, false, false, 0);
+      connectToRoom(roomEditText.getText().toString(), false, false, false, 0, true);
+    }
+  };
+
+  private final OnClickListener textChatListener = new OnClickListener() {
+    @Override
+    public void onClick(View view) {
+      connectToRoom(roomEditText.getText().toString(), false, false, false, 0, false);
     }
   };
 }
