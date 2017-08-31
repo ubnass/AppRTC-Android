@@ -604,6 +604,7 @@ public class PeerConnectionClient {
     rtcConfig.continualGatheringPolicy = PeerConnection.ContinualGatheringPolicy.GATHER_CONTINUALLY;
     // Use ECDSA encryption.
     rtcConfig.keyType = PeerConnection.KeyType.ECDSA;
+    //rtcConfig.iceTransportsType = PeerConnection.IceTransportsType.RELAY;
 
     peerConnection = factory.createPeerConnection(rtcConfig, pcConstraints, pcObserver);
 
@@ -800,6 +801,7 @@ public class PeerConnectionClient {
   }
 
   public void addRemoteIceCandidate(final IceCandidate candidate) {
+    Logging.d(TAG, "addRemoteIceCandidate " + candidate);
     executor.execute(new Runnable() {
       @Override
       public void run() {
@@ -847,8 +849,8 @@ public class PeerConnectionClient {
           sdpDescription = setStartBitrate(
               AUDIO_CODEC_OPUS, false, sdpDescription, peerConnectionParameters.audioStartBitrate);
         }
-        Log.d(TAG, "Set remote SDP.");
         SessionDescription sdpRemote = new SessionDescription(sdp.type, sdpDescription);
+        Log.d(TAG, "Set remote SDP\n" + sdpRemote);
         peerConnection.setRemoteDescription(sdpObserver, sdpRemote);
       }
     });
@@ -1154,6 +1156,7 @@ public class PeerConnectionClient {
   private class PCObserver implements PeerConnection.Observer {
     @Override
     public void onIceCandidate(final IceCandidate candidate) {
+      Logging.d(TAG, "onIceCandidate " + candidate);
       executor.execute(new Runnable() {
         @Override
         public void run() {
@@ -1301,7 +1304,7 @@ public class PeerConnectionClient {
         @Override
         public void run() {
           if (peerConnection != null && !isError) {
-            Log.d(TAG, "Set local SDP from " + sdp.type);
+            Log.d(TAG, "Set local SDP\n" + sdp);
             peerConnection.setLocalDescription(sdpObserver, sdp);
           }
         }

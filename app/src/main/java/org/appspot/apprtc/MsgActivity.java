@@ -37,9 +37,9 @@ public class MsgActivity extends Activity
     String urlParameters = intent.getStringExtra(EXTRA_URLPARAMETERS);
 
 
-    mTvMsg = findViewById(R.id.mTvMsg);
-    mEtMsg = findViewById(R.id.mEtMsg);
-    mBtnSend = findViewById(R.id.mBtnSend);
+    mTvMsg = (TextView) findViewById(R.id.mTvMsg);
+    mEtMsg = (EditText) findViewById(R.id.mEtMsg);
+    mBtnSend = (Button) findViewById(R.id.mBtnSend);
 
     mBtnSend.setOnClickListener(view -> {
       String message = mEtMsg.getText().toString();
