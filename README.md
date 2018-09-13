@@ -11,6 +11,13 @@
 ===
 如果不想自己编译，可直接下载apk进行测试：https://github.com/elesos/AppRTC-Android/raw/master/apprtc-release.apk
 
+
+测试时，app设置的Room server url可以填写我搭建的webRTC服务器(有Room Server，Signal Server，TURN/STUN Server， ICE Server)地址：
+
+http://36.110.202.64:8080
+
+web端地址也是： http://36.110.202.64:8080
+
 其它
 ==
 自己开发的一对一视频聊天，直播连麦和im消息示例程序：
